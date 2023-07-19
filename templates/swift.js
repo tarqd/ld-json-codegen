@@ -7,14 +7,15 @@ const {hasOwn} = Reflect
 
 export function stringify(value, level = 0) {
     if (Array.isArray(value)) {
-        return `[${value.map(v => stringify(v)).join(", ")}]`
+        return `.array([${value.map(v => stringify(v)).join(", ")}])`
     } else if (value instanceof Date) {
         return value.getTime()
     } else if (typeof value == "object" && value !== null) {
-       const lines = ['Dictionary(uniqueKeysWithValues: [']
-       Object.entries(value).forEach(([key, v]) => {
-            lines.push(indent(`(${stringify(key.toString())}, ${stringify(v, level+3)})`, level+2))
-       })
+       const lines = ['.object([']
+       Object.entries(value).map(([key, v]) => {
+            lines.push(indent(`${stringify(key.toString())}: ${stringify(v, level+3)}`, level+2))
+       }).join(',')
+       console.log(lines)
        lines.push(indent("])", level+1))
        return lines.join("\n")
     }
@@ -29,7 +30,7 @@ export function renderContextBuilder(context) {
     const lines = [];
     lines.push(`
 func create${classify(kind)}Context() -> Result<LDContext, ContextBuilderError> {
-    let builder = LDContextBuilder(key: ${stringify(key)})
+    var builder = LDContextBuilder(key: ${stringify(key)})
     builder.kind(${stringify(kind)})
     builder.anonymous(${stringify(!!anonymous)})`);        
     if (!isNullOrUndefined(name)) {
