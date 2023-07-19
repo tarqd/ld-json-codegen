@@ -11,6 +11,6 @@ fun createApplicationContext(): LDContext {
         .name("My Mobile App")
         .set("id", "com.example.app")
         .set("version", "1.0.0")
-        .set("buildDate", 1689788695161)
+        .set("buildDate", 1689794324094)
     return builder.build()
 }
