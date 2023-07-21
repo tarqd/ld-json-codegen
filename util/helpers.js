@@ -39,14 +39,22 @@ export class RenderedTemplate {
         this.fileName = fileName
         this.functionName = functionName
         this.content = content
-        this.imports = (imports || new Set())
+        this.imports = (new Set(imports) || new Set())
+    }
+    renderImports() {
+        switch (this.language) {
+            case "go":
+                return ["import(", ...Array.from(this.imports).sort().map(v => JSON.stringify(v)), ")"].join("\n")
+            default:
+                return Array.from(this.imports).sort().join("\n")
+        }
     }
     getContent() {
         return this.content
     }
     renderToFile(dir) {
         const outFileName = join(dir, this.fileName)
-        writeFileSync(outFileName, Array.from(this.imports).sort().join("\n") + "\n\n" + this.content, {
+        writeFileSync(outFileName, this.renderImports() + "\n\n" + this.content, {
             encoding: 'utf8'
         })
     }
