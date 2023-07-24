@@ -84,6 +84,6 @@ function renderCustomAttributes(customAttributes, level=0) {
         }
         return `.${setter}(${stringify(key)}, ${stringify(value, level)})`
     });
-    return lines.join(".\n")
+    return lines.join("\n")
 }
 
