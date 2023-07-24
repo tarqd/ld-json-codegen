@@ -1,6 +1,6 @@
 import _ from 'underscore.string';
 const {lpad, lines } = _;
-import { writeFileSync } from 'fs';
+
 import { join } from 'path';
 
 export function indent(string, level = 1, step=2, pad=' ') {
@@ -52,12 +52,11 @@ export class RenderedTemplate {
     getContent() {
         return this.content
     }
-    renderToFile(dir) {
-        const outFileName = join(dir, this.fileName)
-        writeFileSync(outFileName, this.renderImports() + "\n\n" + this.content, {
-            encoding: 'utf8'
-        })
+
+    renderToString() {
+        return this.renderImports() + "\n\n" + this.content
     }
+    
     toString() {
         return `[Rendered Template: ${JSON.stringify({
                 language: this.language,

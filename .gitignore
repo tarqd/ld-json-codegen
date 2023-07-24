@@ -1,2 +1,5 @@
 .DS_STORE
 out/*
+node_modules/.*
+node_modules/*
+.parcel-cache/*

@@ -4,6 +4,15 @@ import { renderContextBuilder as goContextBuilder } from "./templates/go.js";
 import { renderContextBuilder as csharpContextBuilder } from "./templates/csharp.js";
 import { renderContextBuilder as javaContextBuilder } from "./templates/csharp.js";
 import { union, RenderedTemplate } from "./util/helpers.js";
+import { writeFileSync } from "fs";
+import { join } from "path";
+
+function renderToFile(template, dir) {
+    const outFileName = join(dir, template.fileName)
+        writeFileSync(outFileName, template.renderToString(), {
+        encoding: 'utf8'
+    })
+}
 
 const user = {
     "key": "some-key",
@@ -84,8 +93,7 @@ function renderAll(language, dir, contexts, ext) {
         content,
         imports
     })
-    template.renderToFile(dir)
-
+    renderToFile(template, dir)
 }
 
 renderAll('swift', './out/ios', swiftContexts.map(c => swiftContextBuilder(c)))

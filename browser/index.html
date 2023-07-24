@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LD Context Code Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/default.min.css">
+
+    <script src="./main.js" type="module"></script>
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        #app {
+            display: flex;
+            /*flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            align-items: stretch;
+            align-content: stretch;*/
+            width: 100%;
+            height: 100%;
+        }
+        #editor,#output {
+            flex: 1 0 50%;
+            display: inline-block;
+        }
+        #options {
+            width: 100%;
+            position: relative;
+        }
+        #language-select {
+            float: right;
+            font-size: x-large;
+            margin-left: .5em;
+            width: 50%;
+        }
+        #rendered {
+            display: block;
+            height: 100%;
+            overflow: scroll;
+        }
+        .cm-editor {
+            height: 100%;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="options">
+    </div>
+    <div id="app">
+        <div id="editor">
+        </div>
+        <div id="output">
+ <pre>
+            <code id="rendered">
+
+            </code>
+        </pre>
+        </div>
+    </div>
+</body>
+</html>
