@@ -2,6 +2,21 @@
 
 WIP project to take JSON definitions of contexts and render examples of how to  build them in each SDK. Swift and Kotlin are partially implemented.
 
+# Web UI
+
+## Development
+You can start a dev server locally using
+```
+./node_modules/.bin/parcel serve browser/index.html
+```
+## Build
+
+You can build the web ui for deployment using the following command:
+```
+./node_modules/.bin/parcel build browser/index.html
+```
+The output will be in `dist/`
+
 # Usage
 Until the CLI is implemented, you'll need to edit index.js directly. 
 
