@@ -6,6 +6,9 @@
   "source": "src/index.html",
 
   "scripts": {
+    "serve": "parcel serve browser/index.html",
+    "build": "parcel build browser/index.html",
+    "clean": "rm -rf ./dist/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

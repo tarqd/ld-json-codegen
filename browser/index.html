@@ -11,6 +11,7 @@
             height: 100vh;
             margin: 0;
             padding: 0;
+            position: relative;
         }
         #app {
             display: flex;
@@ -67,7 +68,24 @@
             margin-left: 1em;
             line-height: 1.5em;
         }
-
+        #copy-bar {
+            z-index: 1;
+            position: absolute;
+            right: 1em;
+            bottom: 1em;
+        }
+        #copy-wrapper {
+            position: sticky;
+            bottom: 1em;
+        }
+        #copy-button {
+            padding: .5em;
+        }
+        #copy-button:hover {
+            cursor: pointer;
+            
+        }
+       
         #rendered {
             display: block;
             height: 100%;
@@ -96,7 +114,13 @@
 
             </code>
         </pre>
+       
         </div>
     </div>
+    <div id="copy-wrapper">
+    <div id="copy-bar">
+        <button id="copy-button">Copy to clipboard</button>
+    </div>
+</div>
 </body>
 </html>

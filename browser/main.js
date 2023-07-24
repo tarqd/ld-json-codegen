@@ -130,6 +130,17 @@ function main() {
         localStorage.setItem("lang", select.options[select.selectedIndex].value)
         renderTemplate({view})
     })
+    const copyButton = document.getElementById("copy-button")
+    const rendered = document.getElementById("rendered")
+    copyButton.addEventListener("click", () => {
+        console.log(rendered.innerText)
+        rendered.focus()
+        navigator.clipboard.writeText(rendered.innerText)
+        setTimeout(() => {
+            alert("Copied to clipboard")
+        }, 0)
+        //alert("Copied to clipboard")
+    })
     
 }
 
