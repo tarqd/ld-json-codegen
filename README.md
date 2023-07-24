@@ -2,6 +2,29 @@
 
 WIP project to take JSON definitions of contexts and render examples of how to  build them in each SDK. Swift and Kotlin are partially implemented.
 
+
+# Web UI
+
+A live demo is available here: [ldcontext.arq.sh](https://ldcontext.arq.sh).
+
+1. Enter the JSON of the single or multi-context in the code editor on the left
+2. Generated context code will appear on the right. You can switch languages using the dropdown
+
+Please use valid JSON syntax, including quoted keys. 
+
+## Development
+You can start a dev server locally using
+```
+./node_modules/.bin/parcel serve browser/index.html
+```
+## Build
+
+You can build the web ui for deployment using the following command:
+```
+./node_modules/.bin/parcel build browser/index.html
+```
+The output will be in `dist/`
+
 # Usage
 Until the CLI is implemented, you'll need to edit index.js directly. 
 
@@ -21,7 +44,8 @@ The function returns a `RenderedTemplate` which is defined in `./util/helpers.js
 
 # TODO
 
-- Create command line tool and web UI
+- [ ] CLI
+- [X] Web UI
 - Option to generate common utility contexts with real attributes populated from the application environment
     - [ ] `browser`
     - [ ] `device`
@@ -32,13 +56,13 @@ The function returns a `RenderedTemplate` which is defined in `./util/helpers.js
     - [ ] Javascript (not really needed, we may add some addition)
         - [ ] Express.js (automatic contexts)
         - [ ] Browser (automatic contexts)
-    - [ ] Java Server-Side
-    - [ ] Java Client-side
-    - [ ] Java Android
+    - [X] Java Server-Side
+    - [X] Java Client-side
+    - [X] Java Android
     - [ ] Obj-C iOS
-    - [ ] Go server-side SDK
+    - [X] Go server-side SDK
     - [ ] Python Server-side SDK
-    - [ ] .Net Server-side
-    - [ ] .Net Client-side
+    - [X] .Net Server-side
+    - [X] .Net Client-side
 
 
