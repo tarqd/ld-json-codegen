@@ -2,7 +2,15 @@
 
 WIP project to take JSON definitions of contexts and render examples of how to  build them in each SDK. Swift and Kotlin are partially implemented.
 
+
 # Web UI
+
+A live demo is available here: [ldcontext.arq.sh](https://ldcontext.arq.sh).
+
+1. Enter the JSON of the single or multi-context in the code editor on the left
+2. Generated context code will appear on the right. You can switch languages using the dropdown
+
+Please use valid JSON syntax, including quoted keys. 
 
 ## Development
 You can start a dev server locally using
