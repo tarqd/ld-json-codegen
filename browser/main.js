@@ -33,18 +33,27 @@ function debounce(func, timeout = 300){
   }
 
 function createSelect() {
-    const select = document.createElement("select")
-    select.id = "language-select"
+    const select = document.getElementById("language-select")
+    const lastLang = localStorage.getItem("lang") || "Swift"
     Object.keys(languages).forEach((lang, index) => {
         const option = document.createElement("option")
         option.value = lang
         option.innerText = lang
-        if (index === 0) {
+        if (lang === lastLang) {
             option.selected = true
         }
         select.appendChild(option)
     })
     return select
+}
+
+function setLanguage(lang) {
+    const select = document.getElementById("language-select")
+    const option = Array.from(select.options).filter(option => option.value === lang).pop();
+    if(option) {
+        option.selected = true
+        localStorage.setItem("lang", option.value)
+    }
 }
 
 const getRenderer = function getRenderer() {
@@ -54,11 +63,13 @@ const getRenderer = function getRenderer() {
 }
 
 
-const renderTemplate = debounce(function renderTemplate(update) {
+function renderTemplate(update) {
     const {view} = update;
     try {
         const {renderer, ext} = getRenderer();
         const context = JSON.parse(view.state.doc.toString())
+        localStorage.setItem("context", JSON.stringify(context))
+        setLanguage(localStorage.getItem("lang") || "Swift")
         if (context.kind === "multi") {
             const contexts = []
             Object.entries(context).filter(([key]) => key !== '_meta' && key !== "kind").forEach(([key, value]) => {
@@ -91,7 +102,8 @@ const renderTemplate = debounce(function renderTemplate(update) {
         console.error(e)
         document.getElementById("rendered").innerText = e.toString()
     }
-}, 500);
+}
+const renderTemplateDebounced = debounce(renderTemplate, 300)
 
 function main() {
     const defaultContext = JSON.stringify({
@@ -99,22 +111,26 @@ function main() {
         name: "Hugh Mann",
         kind: "user"
     }, null, 2)
+    const firstContext = localStorage.getItem("context") || defaultContext
+    const firstLang = localStorage.getItem("lang") || "Swift"
+
 
     let view = new EditorView({
         doc: defaultContext,
         extensions: [
             basicSetup,
             json(),
-            EditorView.updateListener.of(renderTemplate)
+            EditorView.updateListener.of(renderTemplateDebounced)
         ],
     })
     const editor = document.getElementById('editor')
     editor.appendChild(view.dom)
     const select = createSelect();
     select.addEventListener("change", () => {
+        localStorage.setItem("lang", select.options[select.selectedIndex].value)
         renderTemplate({view})
     })
-    document.getElementById("options").appendChild(select)
+    
 }
 
 if (document.readyState === "ready") {
