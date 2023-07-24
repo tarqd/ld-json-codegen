@@ -6,6 +6,8 @@ import { renderContextBuilder as kotlinContextBuilder } from "../templates/kotli
 import { renderContextBuilder as goContextBuilder } from "../templates/go.js";
 import { renderContextBuilder as csharpContextBuilder } from "../templates/csharp.js";
 import { renderContextBuilder as javaContextBuilder } from "../templates/java.js";
+import { renderContextBuilder as objcContextBuilder } from "../templates/objc.js";
+import { renderContextBuilder as pythonContextBuilder } from "../templates/python.js";
 import { union, RenderedTemplate } from "../util/helpers.js";
 
 const languages = {
@@ -13,7 +15,9 @@ const languages = {
     Kotlin: kotlinContextBuilder,
     Go: goContextBuilder,
     "C#": csharpContextBuilder,
-    Java: javaContextBuilder
+    Java: javaContextBuilder,
+    "Objective-C": objcContextBuilder,
+    Python: pythonContextBuilder
 }
 
 const languageExtensions = {
@@ -21,7 +25,9 @@ const languageExtensions = {
     "Kotlin": "kt",
     "Go": "go",
     "C#": "cs",
-    "Java": "java"
+    "Java": "java",
+    "Objective-C": "m",
+    "Python": "py"
 }
 
 function debounce(func, timeout = 300){
@@ -109,7 +115,16 @@ function main() {
     const defaultContext = JSON.stringify({
         key: "some-key",
         name: "Hugh Mann",
-        kind: "user"
+        kind: "user",
+        "groups": ["reader", "writer"],
+        email: "hmann@example.com",
+        location: {
+            country: "US",
+            region: "PA"
+        },
+        _meta: {
+            privateAttributes: ["email"]
+        }
     }, null, 2)
     const firstContext = localStorage.getItem("context") || defaultContext
     const firstLang = localStorage.getItem("lang") || "Swift"
