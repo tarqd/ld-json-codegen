@@ -6,7 +6,7 @@
   "source": "src/index.html",
 
   "scripts": {
-    "serve": "parcel serve browser/index.html",
+    "serve": "parcel serve --no-cache browser/index.html",
     "build": "parcel build browser/index.html",
     "clean": "rm -rf ./dist/*",
     "test": "echo \"Error: no test specified\" && exit 1"

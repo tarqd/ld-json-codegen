@@ -26,8 +26,8 @@ export function stringify(value, level = 0) {
             props.push(indent(`${setter}(${stringify(key.toString())}, ${stringify(v, level+4)})`, level+3))
        })
        const parts = ['ldvalue.ObjectBuild().']
-       parts.push(props.join(".\n"))
-       parts.push(indent("Build()", level+1))
+       parts.push(props.join(".\n") + ".")
+       parts.push(indent("Build()", level+3))
        return parts.join("\n")
     }
     if (value === null || value === undefined) {
@@ -41,7 +41,6 @@ export function renderContextBuilder(context) {
     const {key, kind, anonymous, name} = context
     const {privateAttributes} = context._meta || {}
     const customAttributes = withoutBuiltins(context)
-    console.log(customAttributes)
     const has = (key) => context.hasOwnProperty(key)
     const lines = [];
     const hasPrivateAttributes = privateAttributes && privateAttributes.length > 0;
@@ -52,17 +51,17 @@ func Create${classify(kind)}Context() {
         Anonymous(${stringify(!!anonymous)}).`)
 
     if (!isNullOrUndefined(name)) {
-        lines.push(indent(`Name(${stringify(name)}).`, 3))
+        lines.push(indent(`Name(${stringify(name)}).`, 4))
     }
     if (Object.keys(customAttributes).length > 0) {
-        lines.push(indent(renderCustomAttributes(customAttributes, 0, false), 3))
+        lines.push(indent(renderCustomAttributes(customAttributes, 3) + ".", 4))
     }
     if(hasPrivateAttributes) {
         privateAttributes.forEach((attr) => {
-            lines.push(indent(`Private(${stringify(attr)}).`, 3));
+            lines.push(indent(`Private(${stringify(attr)}).`, 4));
         });
     }
-    lines.push(indent('Build();', 3))
+    lines.push(indent('Build();', 4))
     lines.push('}')
     const imports = new Set([
         "github.com/launchdarkly/go-sdk-common/v3/ldcontext",
@@ -76,15 +75,14 @@ func Create${classify(kind)}Context() {
     })
 }
 
-function renderCustomAttributes(customAttributes, level=0, includeSemicolon = false) {
-    
+function renderCustomAttributes(customAttributes, level=0) {
     const lines = Object.entries(customAttributes).map(([key, value]) => {
         const setter = typeSetterMap[typeof value]
         if (!setter) {
             throw new Error(`Unsupported type ${typeof value}`)
         }
         return `${setter}(${stringify(key)}, ${stringify(value, level)})`
-    })
-    return lines.join(".\n") + lines.length > 0 ? '.' : ''
+    });
+    return lines.join(".\n")
 }
 

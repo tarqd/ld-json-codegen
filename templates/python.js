@@ -33,7 +33,7 @@ export function renderContextBuilder(context) {
     const lines = [];
     lines.push(`
 # python generator is untested
-create${classify(kind)}Context(): 
+def create${classify(kind)}Context(): 
     return Context.builder(${stringify(key)})
         .kind(${stringify(kind)})
         .anonymous(${stringify(!!anonymous)})`);        
