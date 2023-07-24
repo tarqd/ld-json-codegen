@@ -40,7 +40,9 @@ fun create${classify(kind)}Context(): LDContext {
     if (!isNullOrUndefined(name)) {
         lines.push(indent(`.name(${stringify(name)})`, 4))
     }
-    lines.push(indent(renderCustomAttributes(customAttributes), 4))
+    if (Object.keys(customAttributes).length > 0) {
+        lines.push(indent(renderCustomAttributes(customAttributes), 4))
+    }
     if(privateAttributes && privateAttributes.length > 0) {
         lines.push(indent(`.privateAttributes(${privateAttributes.map(stringify).join(", ")})`, 2))
     }

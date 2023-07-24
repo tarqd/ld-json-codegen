@@ -46,7 +46,9 @@ class ${classify(kind)}ContextBuilder {
     if (!isNullOrUndefined(name)) {
         lines.push(indent(`.Name(${stringify(name)})`, 6))
     }
-    lines.push(indent(renderCustomAttributes(customAttributes, 0, false), 6))
+    if (Object.keys(customAttributes).length > 0) {
+        lines.push(indent(renderCustomAttributes(customAttributes, 0, false), 6))
+    }
     if(hasPrivateAttributes) {
         lines.push(indent(`.Private(${privateAttributes.map(stringify).join(", ")})`, 6))
     }

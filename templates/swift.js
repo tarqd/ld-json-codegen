@@ -36,7 +36,9 @@ func create${classify(kind)}Context() -> Result<LDContext, ContextBuilderError> 
     if (!isNullOrUndefined(name)) {
         lines.push(indent(`builder.name(${stringify(name)})`, 2))
     }
-    lines.push(indent(split_lines(renderCustomAttributes(customAttributes)).join('\n'), 2));
+    if (Object.keys(customAttributes).length > 0) {
+        lines.push(indent(renderCustomAttributes(customAttributes)), 2)
+    }
     (privateAttributes || []).forEach((attr) => {
         lines.push(indent(`builder.addPrivateAttribute(Reference(${stringify(attr)}))`, 2))
     })

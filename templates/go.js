@@ -54,7 +54,9 @@ func Create${classify(kind)}Context() {
     if (!isNullOrUndefined(name)) {
         lines.push(indent(`Name(${stringify(name)}).`, 3))
     }
-    lines.push(indent(renderCustomAttributes(customAttributes, 0, false), 3))
+    if (Object.keys(customAttributes).length > 0) {
+        lines.push(indent(renderCustomAttributes(customAttributes, 0, false), 3))
+    }
     if(hasPrivateAttributes) {
         privateAttributes.forEach((attr) => {
             lines.push(indent(`Private(${stringify(attr)}).`, 3));
@@ -83,6 +85,6 @@ function renderCustomAttributes(customAttributes, level=0, includeSemicolon = fa
         }
         return `${setter}(${stringify(key)}, ${stringify(value, level)})`
     })
-    return lines.join(".\n") + '.'
+    return lines.join(".\n") + lines.length > 0 ? '.' : ''
 }
 
