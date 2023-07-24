@@ -36,7 +36,8 @@ The function returns a `RenderedTemplate` which is defined in `./util/helpers.js
 
 # TODO
 
-- Create command line tool and web UI
+- [ ] CLI
+- [X] Web UI
 - Option to generate common utility contexts with real attributes populated from the application environment
     - [ ] `browser`
     - [ ] `device`
@@ -47,13 +48,13 @@ The function returns a `RenderedTemplate` which is defined in `./util/helpers.js
     - [ ] Javascript (not really needed, we may add some addition)
         - [ ] Express.js (automatic contexts)
         - [ ] Browser (automatic contexts)
-    - [ ] Java Server-Side
-    - [ ] Java Client-side
-    - [ ] Java Android
+    - [X] Java Server-Side
+    - [X] Java Client-side
+    - [X] Java Android
     - [ ] Obj-C iOS
-    - [ ] Go server-side SDK
+    - [X] Go server-side SDK
     - [ ] Python Server-side SDK
-    - [ ] .Net Server-side
-    - [ ] .Net Client-side
+    - [X] .Net Server-side
+    - [X] .Net Client-side
 
 
