@@ -2,14 +2,14 @@
 import _ from 'underscore.string';
 const { camelize, quote, slugify, classify } = _;
 import { withoutBuiltins, indent, BUILT_INS, isNullOrUndefined, RenderedTemplate } from '../util/helpers.js';
-const {stringify} = JSON;
+
 const {hasOwn} = Reflect
 
-export function kstringify(value, level = 0) {
+export function stringify(value, level = 0) {
     if (Array.isArray(value)) {
         const lines = ['LDValue.buildArray()']
         value.forEach((v) => {
-             lines.push(indent(`.add(${kstringify(v, level+3)})`, level + 1))
+             lines.push(indent(`.add(${stringify(v, level+3)})`, level + 1))
         });
         lines.push(indent(".build()", level+1))
         return lines.join("\n")
@@ -18,14 +18,14 @@ export function kstringify(value, level = 0) {
     } else if (typeof value == "object" && value !== null) {
        const lines = ['LDValue.buildObject()']
        Object.entries(value).forEach(([key, v]) => {
-            lines.push(indent(`.put(${kstringify(key.toString())}, ${kstringify(v, level+3)})`, level+2))
+            lines.push(indent(`.put(${stringify(key.toString())}, ${stringify(v, level+3)})`, level+2))
        })
        lines.push(indent(".build()", level+1))
        return lines.join("\n")
     } else if (typeof value == "number" && !isNaN(value)) {
-        return `${stringify(value)}d`
+        return `${JSON.stringify(value)}d`
     }
-    return stringify(value)
+    return JSON.stringify(value)
 }
 
 export function renderContextBuilder(context) {
@@ -73,7 +73,7 @@ class ${classify(kind)}ContextBuilder {
 function renderCustomAttributes(customAttributes, level=0, includeSemicolon = false) {
     const lines = [];
     Object.entries(customAttributes).map(([key, value]) => {
-        lines.push(`.set(${stringify(key)}, ${kstringify(value, level)})`)
+        lines.push(`.set(${JSON.stringify(key)}, ${stringify(value, level)})`)
 
     })
     return lines.join("\n")
