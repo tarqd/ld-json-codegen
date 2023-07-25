@@ -12,9 +12,9 @@ export function stringify(value, level = 0) {
         return value.getTime()
     } else if (typeof value == "object" && value !== null) {
        const lines = ['[LDValue ofObject: @{ ']
-       lines.push(...Object.entries(value).map(([key, v]) => {
+       lines.push(Object.entries(value).map(([key, v]) => {
             return indent(`@${JSON.stringify(key.toString())}: ${stringify(v, level+3)}`, level+2)
-       }).join(','))
+       }).join(',\n'))
        lines.push(indent("]", level+1))
        return lines.join("\n")
     } 
