@@ -66,6 +66,7 @@ pub fn create_${underscored(kind)}_context() -> Result<Context, String> {
     lines.push('}')
     const imports = new Set([
         "use launchdarkly_server_sdk::{Context, ContextBuilder, AttributeValue};",
+        "use std::collections::{hash_map::HashMap, vec::Vec};",
     ])
     return new RenderedTemplate({
         language: "rust",

@@ -12,10 +12,9 @@ export function stringify(value, level = 0) {
         return value.getTime()
     } else if (typeof value == "object" && value !== null) {
        const lines = ['{']
-       Object.entries(value).map(([key, v]) => {
-            lines.push(indent(`${stringify(key.toString())}: ${stringify(v, level+3)}`, level+2))
-       }).join(',')
-       console.log(lines)
+       lines.push(...Object.entries(value).map(([key, v]) => {
+            return indent(`${stringify(key.toString())}: ${stringify(v, level+3)}`, level+2)
+       }).join(','))
        lines.push(indent("}", level+1))
        return lines.join("\n")
     }
