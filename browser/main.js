@@ -8,6 +8,7 @@ import { renderContextBuilder as csharpContextBuilder } from "../templates/cshar
 import { renderContextBuilder as javaContextBuilder } from "../templates/java.js";
 import { renderContextBuilder as objcContextBuilder } from "../templates/objc.js";
 import { renderContextBuilder as pythonContextBuilder } from "../templates/python.js";
+import { renderContextBuilder as rubyContextBuilder } from "../templates/ruby.js";
 import { renderContextBuilder as rustContextBuilder } from "../templates/rust.js";
 import { union, RenderedTemplate } from "../util/helpers.js";
 
@@ -19,6 +20,7 @@ const languages = {
     Java: javaContextBuilder,
     "Objective-C": objcContextBuilder,
     Python: pythonContextBuilder,
+    Ruby: rubyContextBuilder,
     Rust: rustContextBuilder
 }
 
