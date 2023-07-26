@@ -1,5 +1,5 @@
 import _ from "underscore.string";
-const { classify } = _;
+const { classify, underscored } = _;
 import {
   withoutBuiltins,
   indent,
