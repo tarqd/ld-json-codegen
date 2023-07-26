@@ -1,5 +1,6 @@
 name: Publish to linode object store
 on:
+  workflow_dispatch:
   push:
     branches: ['main']
     paths:
