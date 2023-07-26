@@ -34,4 +34,4 @@ jobs:
         run: |
           ls -liah ~/.s3cfg
           cat ~/.s3cfg
-          s3cmd sync --recursive --acl-public dist/ s3://ldcontext.arq.sh/dev/prs/${{ github.event.pull_request.number }}/
+          s3cmd sync -d -c ~/.s3cfg --recursive --acl-public dist/ s3://ldcontext.arq.sh/dev/prs/${{ github.event.pull_request.number }}/
