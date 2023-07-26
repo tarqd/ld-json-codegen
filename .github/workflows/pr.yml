@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       deployments: write
-      pull-requests: write
       statuses: write
     steps:
       - uses: actions/checkout@v3
@@ -35,3 +34,11 @@ jobs:
           ls -liah ~/.s3cfg
           cat ~/.s3cfg
           s3cmd sync -d -c ~/.s3cfg --recursive --acl-public dist/ s3://ldcontext.arq.sh/dev/prs/${{ github.event.pull_request.number }}/
+      - uses: chrnorm/deployment-action@v2
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN}}
+          description: 'Publish preview'
+          environment: development
+          environment-url: https://ldcontext.arq.sh/dev/prs/${{ github.event.pull_request.number }}/index.html
