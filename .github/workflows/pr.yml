@@ -22,7 +22,7 @@ jobs:
           node-version: '16.x'
       - name: Build site 
         run: |
-          npm install && npm run build
+          npm install && ./node_modules/.bin/parcel build browser/index.html --public-url /dev/prs/${{ github.event.pull_request.number }}/
       - name: Set up S3cmd cli tool
         uses: s3-actions/s3cmd@v1.5.0
         with:
@@ -32,8 +32,5 @@ jobs:
           secret_key: ${{ secrets.S3_SECRET_KEY }}
       - name: Interact with object storage
         run: |
-          ls -lia ~
-          pwd
-          cat ~/.s3cfg
-          s3cmd sync --recursive --acl-public dist s3://ldcontext.arq.sh/dev/pr-${{ github.event.pull_request.number }}/
+          s3cmd sync --recursive --acl-public dist/ s3://ldcontext.arq.sh/dev/prs/${{ github.event.pull_request.number }}/
           s3cmd info s3://ldcontext.arq.sh
