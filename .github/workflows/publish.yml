@@ -38,7 +38,7 @@ jobs:
           secret_key: ${{ secrets.S3_SECRET_KEY }}
       - name: Interact with object storage
         run: |
-          s3cmd sync --guess-mime-type --recursive --acl-public dist/ s3://ldcontext.arq.sh/
+          s3cmd sync --guess-mime-type --no-mime-magic --recursive --acl-public dist/ s3://ldcontext.arq.sh/
       - name: Update deployment status (success)
         if: success()
         uses: chrnorm/deployment-status@v2
