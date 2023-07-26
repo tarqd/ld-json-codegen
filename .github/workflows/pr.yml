@@ -1,0 +1,41 @@
+name: Publish PR preview
+on: 
+    pull_request:
+        types: [opened, synchronize, reopened]
+        paths:
+            - 'browser/**'
+            - 'templates/**'
+            - 'util/**'
+jobs:
+  publish-production:
+    runs-on: ubuntu-latest
+    permissions:
+      deployments: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: Build site 
+        run: |
+          npm install && npm run build
+      - uses: chrnorm/deployment-action@v2
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN}}
+          description: 'Publish to production'
+          environment: development
+          environment-url: https://ldcontext.arq.sh/dev/pr-${{ github.event.pull_request.number }}/index.html
+      - name: Set up S3cmd cli tool
+        uses: s3-actions/s3cmd@v1.5.0
+        with:
+          provider: linode # default is linode
+          region: 'us-east-1'
+          access_key: ${{ secrets.S3_ACCESS_KEY }}
+          secret_key: ${{ secrets.S3_SECRET_KEY }}
+      - name: Interact with object storage
+        run: |
+          s3cmd sync --recursive --acl-public dist s3://ldcontext.arq.sh/dev/pr-${{ github.event.pull_request.number }}
+          s3cmd info s3://ldcontext.arq.sh
