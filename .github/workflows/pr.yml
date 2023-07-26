@@ -32,5 +32,6 @@ jobs:
           secret_key: ${{ secrets.S3_SECRET_KEY }}
       - name: Interact with object storage
         run: |
+          ls -liah ~/.s3cfg
+          cat ~/.s3cfg
           s3cmd sync --recursive --acl-public dist/ s3://ldcontext.arq.sh/dev/prs/${{ github.event.pull_request.number }}/
-          s3cmd info s3://ldcontext.arq.sh
