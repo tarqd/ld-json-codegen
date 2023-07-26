@@ -7,7 +7,7 @@ on:
             - 'templates/**'
             - 'util/**'
 jobs:
-  publish-production:
+  publish-preview:
     runs-on: ubuntu-latest
     permissions:
       deployments: write
@@ -25,7 +25,7 @@ jobs:
         id: deployment
         with:
           token: ${{ secrets.GITHUB_TOKEN}}
-          description: 'Publish to production'
+          description: 'Publish preview'
           environment: development
           environment-url: https://ldcontext.arq.sh/dev/pr-${{ github.event.pull_request.number }}/index.html
       - name: Set up S3cmd cli tool
