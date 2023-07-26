@@ -5,6 +5,8 @@ on:
 jobs:
   publish-production:
     runs-on: ubuntu-latest
+    permissions:
+      deployments: write
     steps:
       - uses: actions/checkout@master
       - uses: chrnorm/deployment-action@v2
