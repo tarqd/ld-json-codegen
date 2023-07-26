@@ -1,7 +1,9 @@
 .DS_STORE
+out
 out/*
 node_modules/.*
 node_modules/*
-.parcel-cache/*dist/*
-dist
+.parcel-cache/*
 .parcel-cache
+dist
+dist/*
