@@ -2,6 +2,10 @@ name: Publish to linode object store
 on:
   push:
     branches: ['main']
+    paths:
+      - 'browser/**'
+      - 'templates/**'
+      - 'util/**'
 jobs:
   publish-production:
     runs-on: ubuntu-latest
