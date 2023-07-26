@@ -19,6 +19,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
+      - uses: chrnorm/deployment-action@v2
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN}}
+          description: 'Publish preview'
+          environment: development
+          environment-url: https://ldcontext.arq.sh/dev/prs/${{ github.event.pull_request.number }}/index.html
       - name: Build site 
         run: |
           npm install && ./node_modules/.bin/parcel build browser/index.html --public-url /dev/prs/${{ github.event.pull_request.number }}/
@@ -34,11 +42,19 @@ jobs:
           ls -liah ~/.s3cfg
           cat ~/.s3cfg
           s3cmd sync -d -c ~/.s3cfg -M --recursive --acl-public dist/ s3://ldcontext.arq.sh/dev/prs/${{ github.event.pull_request.number }}/
-      - uses: chrnorm/deployment-action@v2
-        name: Create GitHub deployment
-        id: deployment
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN}}
-          description: 'Publish preview'
-          environment: development
-          environment-url: https://ldcontext.arq.sh/dev/prs/${{ github.event.pull_request.number }}/index.html
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'success'
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'failure'

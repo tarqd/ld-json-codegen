@@ -25,7 +25,7 @@ jobs:
         name: Create GitHub deployment
         id: deployment
         with:
-          token: ${{ secrets.GITHUB_TOKEN}}
+          token: ${{ github.token }}
           description: 'Publish to production'
           environment: production
           environment-url: https://ldcontext.arq.sh/
@@ -39,3 +39,19 @@ jobs:
       - name: Interact with object storage
         run: |
           s3cmd sync -M --recursive --acl-public dist/ s3://ldcontext.arq.sh/
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'success'
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'failure'
