@@ -1,0 +1,29 @@
+name: Publish to linode object store
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: chrnorm/deployment-action@releases/v1
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN}}
+          description: 'Publish to production'
+          environment: production
+          environment_url: https://ldcontext.arq.sh/
+    - name: Set up S3cmd cli tool
+      uses: s3-actions/s3cmd@v1.5.0
+      with:
+        provider: linode # default is linode
+        region: 'us-east-1'
+        access_key: ${{ secrets.S3_ACCESS_KEY }}
+        secret_key: ${{ secrets.S3_SECRET_KEY }}
+    - name: Interact with object storage
+      run: |
+        s3cmd sync --recursive --acl-public dist s3://ldcontext.arq.sh
+        s3cmd info s3://ldcontext.arq.sh
