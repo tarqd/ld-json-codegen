@@ -7,14 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: chrnorm/deployment-action@releases/v1
+      - uses: chrnorm/deployment-action@v2
         name: Create GitHub deployment
         id: deployment
         with:
           token: ${{ secrets.GITHUB_TOKEN}}
           description: 'Publish to production'
           environment: production
-          environment_url: https://ldcontext.arq.sh/
+          environment-url: https://ldcontext.arq.sh/
       - name: Set up S3cmd cli tool
         uses: s3-actions/s3cmd@v1.5.0
         with:
