@@ -23,15 +23,6 @@ jobs:
       - name: Build site 
         run: |
           npm install && npm run build
-      - uses: chrnorm/deployment-action@v2
-        name: Create GitHub deployment
-        id: deployment
-        with:
-          token: ${{ secrets.GITHUB_TOKEN}}
-          description: 'Publish preview'
-          environment: development
-          transient-environment: true
-          environment-url: https://ldcontext.arq.sh/dev/pr-${{ github.event.pull_request.number }}/index.html
       - name: Set up S3cmd cli tool
         uses: s3-actions/s3cmd@v1.5.0
         with:
