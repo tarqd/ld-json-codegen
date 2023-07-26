@@ -26,6 +26,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN}}
           description: 'Publish preview'
           environment: development
+          transient-environment: true
           environment-url: https://ldcontext.arq.sh/dev/prs/${{ github.event.pull_request.number }}/index.html
       - name: Build site 
         run: |
