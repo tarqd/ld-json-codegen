@@ -4,7 +4,6 @@
   "description": "",
   "type": "module",
   "source": "src/index.html",
-
   "scripts": {
     "serve": "parcel serve --no-cache browser/index.html",
     "build": "parcel build browser/index.html",
@@ -20,8 +19,10 @@
     "underscore.string": "^3.3.6"
   },
   "devDependencies": {
+    "eslint": "^8.45.0",
     "parcel": "^2.9.3",
     "path-browserify": "^1.0.1",
+    "prettier": "^3.0.0",
     "process": "^0.11.10"
   }
 }
