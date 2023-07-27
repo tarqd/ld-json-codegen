@@ -95,7 +95,7 @@ export function renderMultiContextBuilder(contexts) {
 `func createMultiContext() throws -> LDContext {
     return try LDMultiContextBuilder()
 ${indent(contextTemplates.map(c => `.add_context(${c.functionName}())`).join("\n"), 4)}
-    .build().get()
+        .build().get()
 }
 `;
     

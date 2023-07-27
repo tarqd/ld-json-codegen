@@ -1,126 +1,146 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>LD Context Code Generator</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/default.min.css">
+    <head>
+        <meta charset="UTF-8" />
+        <title>LD Context Code Generator</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/default.min.css"
+        />
 
-    <script src="./main.js" type="module"></script>
-    <style>
-        body {
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            position: relative;
-        }
-        #app {
-            display: flex;
-            /*flex-direction: column;
+        <script src="./main.js" type="module"></script>
+        <style>
+            body {
+                height: 100vh;
+                margin: 0;
+                padding: 0;
+                position: relative;
+            }
+            #app {
+                display: flex;
+                /*flex-direction: column;
             flex-wrap: nowrap;
             justify-content: flex-start;
             align-items: stretch;
             align-content: stretch;*/
-            width: 100%;
-            height: 100%;
-        }
-        #editor {
-            border-right: 1px solid #ccc;
-            margin-right: 1.5em;
-        }
+                width: 100%;
+                height: 100%;
+            }
+            #editor {
+                border-right: 1px solid #ccc;
+                margin-right: 1.5em;
+            }
 
-        #editor,#output {
-            flex: 1 0 50%;
-            display: inline-block;
-        }
-        #options {
-            width: 100%;
-            position: relative;
-            border-bottom: 1px solid #ccc;
-            height: 2.5em;
-            padding-bottom:1em;
-        }
-        #language-label {
-            font-weight: bold;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-size: x-large;
-            margin-right: .5em;
-            
-        }
-        #select-wrapper {
-            
-            float: right;
-            font-size: x-large;
-            margin-left: .5em;
-            padding-right: .5em;
-            padding-top: .5em;
-            padding-bottom: .5em;
-           
-        }
-        #language-select {
-            font-size: x-large;
-            width: 10em;
+            #editor,
+            #output {
+                flex: 1 0 50%;
+                display: inline-block;
+            }
+            #options {
+                width: 100%;
+                position: relative;
+                border-bottom: 1px solid #ccc;
+                height: 2.5em;
+                padding-bottom: 1em;
+            }
+            #language-label {
+                font-weight: bold;
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    Roboto,
+                    Oxygen,
+                    Ubuntu,
+                    Cantarell,
+                    "Open Sans",
+                    "Helvetica Neue",
+                    sans-serif;
+                font-size: x-large;
+                margin-right: 0.5em;
+            }
+            #select-wrapper {
+                float: right;
+                font-size: x-large;
+                margin-left: 0.5em;
+                padding-right: 0.5em;
+                padding-top: 0.5em;
+                padding-bottom: 0.5em;
+            }
+            #language-select {
+                font-size: x-large;
+                width: 10em;
+            }
+            #options h1 {
+                display: inline-block;
+                margin: 0;
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    Roboto,
+                    Oxygen,
+                    Ubuntu,
+                    Cantarell,
+                    "Open Sans",
+                    "Helvetica Neue",
+                    sans-serif;
+                margin-left: 1em;
+                line-height: 1.5em;
+            }
+            #copy-bar {
+                z-index: 1;
+                position: absolute;
+                right: 1em;
+                bottom: 1em;
+            }
+            #copy-wrapper {
+                position: sticky;
+                bottom: 1em;
+            }
+            #copy-button {
+                padding: 0.5em;
+            }
+            #copy-button:hover {
+                cursor: pointer;
+            }
 
-        }
-        #options h1 {
-            display: inline-block;
-            margin:0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin-left: 1em;
-            line-height: 1.5em;
-        }
-        #copy-bar {
-            z-index: 1;
-            position: absolute;
-            right: 1em;
-            bottom: 1em;
-        }
-        #copy-wrapper {
-            position: sticky;
-            bottom: 1em;
-        }
-        #copy-button {
-            padding: .5em;
-        } 
-        #copy-button:hover {
-            cursor: pointer;
-            
-        }
-       
-        #rendered {
-            display: block;
-            height: 100%;
-            overflow: scroll;
-        }
-        .cm-editor {
-            height: 100%;
-        }
-
-    </style>
-</head>
-<body>
-    <div id="options">
-        <h1>LaunchDarkly Context Generator</h1>
-        <div id="select-wrapper">
-            <label id="language-label" for="language-select">Language:</label>
-            <select id="language-select"></select>
+            #rendered {
+                display: block;
+                height: 100%;
+                overflow: scroll;
+            }
+            .cm-editor {
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="options">
+            <h1>LaunchDarkly Context Generator</h1>
+            <div id="select-wrapper">
+                <label id="language-label" for="language-select"
+                    >Language:</label
+                >
+                <select id="language-select"></select>
+            </div>
         </div>
-    </div>
-    <div id="app">
-        <div id="editor">
-        </div>
-        <div id="output">
- <pre>
+        <div id="app">
+            <div id="editor"></div>
+            <div id="output">
+                <pre>
             <code id="rendered">
 
             </code>
         </pre>
-       
+            </div>
         </div>
-    </div>
-    <div id="copy-wrapper">
-    <div id="copy-bar">
-        <button id="copy-button">Copy to clipboard</button>
-    </div>
-</div>
-</body>
+        <div id="copy-wrapper">
+            <div id="copy-bar">
+                <button id="copy-button">Copy to clipboard</button>
+            </div>
+        </div>
+    </body>
 </html>
