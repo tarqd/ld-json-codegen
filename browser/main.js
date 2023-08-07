@@ -16,17 +16,22 @@ const languages = {
     Rust: renderers.rust,
 };
 
-const languageExtensions = {
+const languageSlugs = {
     Swift: "swift",
-    Kotlin: "kt",
+    Kotlin: "kotlin",
     Go: "go",
-    "C#": "cs",
+    "C#": "csharp",
     Java: "java",
-    "Objective-C": "m",
-    Python: "py",
-    Rust: "rs",
-    Ruby: "rb",
+    "Objective-C": "objc",
+    Python: "python",
+    Rust: "rust",
+    Ruby: "ruby",
 };
+
+function langForSlug(slug) {
+    let value = Object.entries(languageSlugs).find(([lang, s]) => s === slug)
+    return value ? value[0] : null;
+}
 
 function debounce(func, timeout = 300) {
     let timer;
@@ -38,14 +43,41 @@ function debounce(func, timeout = 300) {
     };
 }
 
-function createSelect() {
+function parseParams() {
+    let params = new URLSearchParams(window.location.search);
+    return params;
+}
+
+function parseContextFragment() {
+    console.log("parsing context fragment")
+    try {
+        let fragment = window.location.hash;
+        let url = new URL(window.location.href);
+        url.hash = "";
+        window.history.replaceState({wasJS: true}, "", url);
+        if (fragment.startsWith("#")) {
+            fragment = fragment.slice(1);
+        }
+        if (fragment.length === 0 ) return;
+
+        return JSON.stringify(JSON.parse(atob(fragment)), null, 2);
+        
+
+    }
+    catch(e) {
+        console.log("failed to parse context from fragment", e);
+    }
+    
+}
+
+function createSelect(selected) {
     const select = document.getElementById("language-select");
-    const lastLang = localStorage.getItem("lang") || "Swift";
+    
     Object.keys(languages).forEach((lang, index) => {
         const option = document.createElement("option");
         option.value = lang;
         option.innerText = lang;
-        if (lang === lastLang) {
+        if (lang === selected) {
             option.selected = true;
         }
         select.appendChild(option);
@@ -54,16 +86,33 @@ function createSelect() {
 }
 
 
-const getRenderer = function getRenderer() {
+function getRenderer() {
     const select = document.getElementById("language-select");
     const lang = select.options[select.selectedIndex].value;
-    return { renderer: languages[lang], ext: languageExtensions[lang] };
+    return languages[lang];
 };
+
+function getSlug() {
+    const select = document.getElementById("language-select");
+    const lang = select.options[select.selectedIndex].value;
+    return languageSlugs[lang];
+}
+
+function setLanguage(lang) {
+    const select = document.getElementById("language-select");
+    for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === lang) {
+            select.selectedIndex = i;
+            break;
+        }
+    }
+}
+
 
 function renderTemplate(update) {
     const { view } = update;
     try {
-        const { renderer, ext } = getRenderer();
+        const renderer = getRenderer();
         const { renderContextBuilder, renderMultiContextBuilder } = renderer;
         const context = JSON.parse(view.state.doc.toString());
         localStorage.setItem("context", JSON.stringify(context));
@@ -107,6 +156,7 @@ function renderTemplate(update) {
         document.getElementById("rendered").innerText = e.toString();
     }
 }
+
 const renderTemplateDebounced = debounce(renderTemplate, 300);
 
 function loadContext() {
@@ -144,9 +194,10 @@ function main() {
         null,
         2,
     );
-    const firstContext = loadContext() || defaultContext;
-    const firstLang = localStorage.getItem("lang") || "Swift";
-
+    
+    const firstContext = parseContextFragment() || loadContext() || defaultContext;
+    const firstLang = "Swift";
+    
     let view = new EditorView({
         doc: firstContext,
         extensions: [
@@ -157,23 +208,74 @@ function main() {
     });
     const editor = document.getElementById("editor");
     editor.appendChild(view.dom);
-    const select = createSelect();
+    let params = parseParams();
+    let paramLang = langForSlug(params.get("lang"));
+    let lang = paramLang || localStorage.getItem("lang");
+    console.log(params, paramLang, lang);
+    const select = createSelect(languages[lang] ? lang : firstLang);
+    function updateFromHash() {
+        try {
+           
+            let context = parseContextFragment();
+            if (context) {
+                view.dispatch({
+                    changes: {from: 0, to: view.state.doc.length, insert: context},
+                });
+            }
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    window.addEventListener("hashchange", updateFromHash);
+    window.addEventListener("onpopstate", (event) => {
+        if(event.state.wasJS) {
+            return;
+        }
+        updateFromHash();
+        let params = parseParams();
+        let paramLang = langForSlug(params.get("lang"));
+        paramLang && setLanguage(paramLang);
+
+    });
     select.addEventListener("change", () => {
+        let lang = select.options[select.selectedIndex].value;
         localStorage.setItem(
             "lang",
-            select.options[select.selectedIndex].value,
+            lang,
         );
+        let params = parseParams();
+        params.set("lang", languageSlugs[lang]);
+        let url = new URL(window.location);
+        url.searchParams.set("lang", languageSlugs[lang]);
+        window.history.pushState({lang, wasJS: true }, "", url);
         renderTemplate({ view });
     });
     const copyButton = document.getElementById("copy-button");
     const rendered = document.getElementById("rendered");
     copyButton.addEventListener("click", () => {
-        console.log(rendered.innerText);
         rendered.focus();
         navigator.clipboard.writeText(rendered.innerText);
         setTimeout(() => {
             alert("Copied to clipboard");
         }, 0);
+    });
+    const hashLink = document.getElementById("hashlink");
+    hashLink.addEventListener("click", (e) => { 
+        e.preventDefault();
+        try {
+            let url = new URL(window.location.href);
+            url.hash = btoa(JSON.stringify(JSON.parse(view.state.doc.toString())));
+            hashLink.href = url.toString();
+            hashLink.focus();
+            navigator.clipboard.writeText(hashLink.href);
+            setTimeout(() => {
+                alert("Copied permalink to clipboard");
+            }, 0);
+        } catch(e) {
+            alert("failed to generate permalink: " + e.toString());
+        }
+        return false;
     });
     renderTemplate({view})
 }

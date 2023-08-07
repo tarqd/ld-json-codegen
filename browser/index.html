@@ -10,6 +10,14 @@
 
         <script src="./main.js" type="module"></script>
         <style>
+            #hashlink {
+                color: #ccc;
+                text-decoration: none;
+            }
+            #hashlink:hover {
+                color: #aaa;
+                cursor: pointer;
+            }
             body {
                 height: 100vh;
                 margin: 0;
@@ -119,7 +127,7 @@
     </head>
     <body>
         <div id="options">
-            <h1>LaunchDarkly Context Generator</h1>
+            <h1>LaunchDarkly Context Generator <a id="hashlink" href="#" title="Copy permalink">#</a></h1>
             <div id="select-wrapper">
                 <label id="language-label" for="language-select"
                     >Language:</label
