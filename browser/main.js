@@ -111,7 +111,14 @@ const renderTemplateDebounced = debounce(renderTemplate, 300);
 
 function loadContext() {
     try {
-        const context = JSON.parse(localStorage.getItem("context"));
+        const value = localStorage.getItem("context");
+        if (!value) {
+            return null;
+        }
+        const context = JSON.parse(value);
+        if (typeof context !== "object") {
+            return null;
+        }
         return JSON.stringify(context, null, 2)
     } catch (e) {
         return null;
