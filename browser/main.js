@@ -59,8 +59,11 @@ function parseContextFragment() {
             fragment = fragment.slice(1);
         }
         if (fragment.length === 0 ) return;
-
-        return JSON.stringify(JSON.parse(atob(fragment)), null, 2);
+        let parsed = JSON.parse(atob(fragment));
+        if (typeof parsed !== "object" || Object.keys(parsed).length === 0) {
+            throw new Error("parsed context is empty");
+        }
+        return JSON.stringify(parsed, null, 2);
         
 
     }
@@ -275,6 +278,14 @@ function main() {
         } catch(e) {
             alert("failed to generate permalink: " + e.toString());
         }
+        return false;
+    });
+    let resetLink = document.getElementById("resetlink");
+    resetLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        view.dispatch({
+            changes: {from: 0, to: view.state.doc.length, insert: defaultContext},
+        });
         return false;
     });
     renderTemplate({view})
