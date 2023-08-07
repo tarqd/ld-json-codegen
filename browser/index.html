@@ -27,6 +27,16 @@
             #options #resetlink:hover {
                 color: #d81a1a;
                 cursor: pointer;
+                
+            }
+            #options a:active {
+                color: #888 !important;
+                position: relative;
+                top: 0;
+            }
+            #options a:active::after {
+                content: attr(data-done) !important;
+                left: -50% !important;
             }
             #options a:hover::after {
                 content: attr(data-tooltip);
@@ -151,7 +161,7 @@
     </head>
     <body>
         <div id="options">
-            <h1>LaunchDarkly Context Generator <a id="hashlink" href="#" data-tooltip="Copy permalink">#</a><a id="resetlink" href="#"  data-tooltip="Reset to default context">&#x232B;</a></h1>
+            <h1>LaunchDarkly Context Generator <a id="hashlink" href="#" data-done="Copied!" data-tooltip="Copy permalink">#</a><a id="resetlink" href="#" data-done="Reset!" data-tooltip="Reset to default context">&#x232B;</a></h1>
             <div id="select-wrapper">
                 <label id="language-label" for="language-select"
                     >Language:</label

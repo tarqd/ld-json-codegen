@@ -272,9 +272,7 @@ function main() {
             hashLink.href = url.toString();
             hashLink.focus();
             navigator.clipboard.writeText(hashLink.href);
-            setTimeout(() => {
-                alert("Copied permalink to clipboard");
-            }, 0);
+            
         } catch(e) {
             alert("failed to generate permalink: " + e.toString());
         }
