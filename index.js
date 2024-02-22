@@ -3,6 +3,7 @@ import { renderContextBuilder as kotlinContextBuilder } from "./templates/kotlin
 import { renderContextBuilder as goContextBuilder } from "./templates/go.js";
 import { renderContextBuilder as csharpContextBuilder } from "./templates/csharp.js";
 import { renderContextBuilder as javaContextBuilder } from "./templates/csharp.js";
+import { renderContextBuilder as cppContextBuilder } from "./templates/cpp.js";
 import { union, RenderedTemplate } from "./util/helpers.js";
 import { writeFileSync } from "fs";
 import { join } from "path";
@@ -101,3 +102,4 @@ renderAll('kotlin', './out/android', kotlinContexts.map(c => kotlinContextBuilde
 renderAll('java', './out/java', kotlinContexts.map(c => javaContextBuilder(c)))
 renderAll('csharp', './out/csharp', kotlinContexts.map(c => csharpContextBuilder(c)), 'cs')
 renderAll('go', './out/go', kotlinContexts.map(c => goContextBuilder(c)))
+renderAll('cpp', './out/cpp', kotlinContexts.map(c => cppContextBuilder(c)), 'cpp')
