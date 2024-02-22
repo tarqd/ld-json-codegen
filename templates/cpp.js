@@ -71,12 +71,12 @@ export function renderContextBuilder(context, multi = false) {
     const lines = [];
     if (multi) {
         lines.push(
-            `void build${classify(kind)}Context(ContextBuilder& builder) {
+            `void add${classify(kind)}Context(ContextBuilder& builder) {
     builder`,
         );
     } else {
         lines.push(`Context create${classify(kind)}Context() {
-            ContextBuilder()`);
+    return ContextBuilder()`);
     }
     lines.push(
         `\t.Kind(${JSON.stringify(kind)}, ${JSON.stringify(key)})
@@ -95,15 +95,16 @@ export function renderContextBuilder(context, multi = false) {
     }
 
     if (!multi) {
-        lines.push(indent(".Build();", 2));
-        lines.push("}");
+        lines.push(indent(".Build();", 4));
+    } else {
+        lines[lines.length-1] += ';';
     }
     lines.push("}\n");
 
     return new RenderedTemplate({
         language: "cpp",
         fileName: `${classify(kind)}Context.m`,
-        functionName: `${multi ? "build": "create" }${classify(kind)}Context`,
+        functionName: `${multi ? "add": "create" }${classify(kind)}Context`,
         content: lines.join("\n"),
         imports,
     });
@@ -122,7 +123,7 @@ function renderCustomAttributes(
             }(${JSON.stringify(key)}, ${stringify(value, level)})`,
         );
     });
-    lines.push();
+    
     return lines.join("\n");
 }
 
@@ -149,8 +150,8 @@ ${contextTemplates
 `;
     return [
         new RenderedTemplate({
-            language: "objc",
-            fileName: `MultiContextExample.m`,
+            language: "cpp",
+            fileName: `multi_context.cpp`,
             functionName: `createMultiContext`,
             content,
             imports,
