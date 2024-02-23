@@ -18,12 +18,12 @@ export function stringify(value, level = 0) {
     } else if (typeof value == "object" && value !== null) {
         // c++ map initializer of string to Value
 
-        const lines = ["{"];
+        const lines = ["Object{"];
         lines.push(
             Object.entries(value)
                 .map(([key, v]) => {
                     return indent(
-                        `{${JSON.stringify(key.toString())}: ${stringify(
+                        `{${JSON.stringify(key.toString())}, ${stringify(
                             v,
                             level + 3,
                         )}}`,
@@ -62,7 +62,8 @@ export function renderContextBuilder(context, multi = false) {
         "#include <launchdarkly/attributes_builder.hpp>",
         "#include <launchdarkly/context.hpp>",
         "#include <launchdarkly/value.hpp>",
-        "#include <string>",
+        "#include <string>"
+        ,
     ]);
     const { key, kind, anonymous, name } = context;
     const { privateAttributes = [] } = context._meta || {};
@@ -72,10 +73,12 @@ export function renderContextBuilder(context, multi = false) {
     if (multi) {
         lines.push(
             `void add${classify(kind)}Context(ContextBuilder& builder) {
+    using launchdarkly::Value::Object;
     builder`,
         );
     } else {
         lines.push(`Context create${classify(kind)}Context() {
+    using launchdarkly::Value::Object;
     return ContextBuilder()`);
     }
     lines.push(
