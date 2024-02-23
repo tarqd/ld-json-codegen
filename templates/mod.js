@@ -7,6 +7,7 @@ import * as objc from "./objc.js";
 import * as python from "./python.js";
 import * as ruby from "./ruby.js";
 import * as rust from "./rust.js";
+import * as cpp from "./cpp.js";
 
 
 export default {
@@ -18,5 +19,6 @@ export default {
     objc,
     python,
     ruby,
-    rust
+    rust,
+    cpp,
 }

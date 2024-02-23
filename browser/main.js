@@ -14,6 +14,7 @@ const languages = {
     Python: renderers.python,
     Ruby: renderers.ruby,
     Rust: renderers.rust,
+    "C++": renderers.cpp,
 };
 
 const languageSlugs = {
@@ -26,6 +27,7 @@ const languageSlugs = {
     Python: "python",
     Rust: "rust",
     Ruby: "ruby",
+    "C++": "cpp",
 };
 
 function langForSlug(slug) {
@@ -49,7 +51,6 @@ function parseParams() {
 }
 
 function parseContextFragment() {
-    console.log("parsing context fragment")
     try {
         let fragment = window.location.hash;
         let url = new URL(window.location.href);
@@ -68,7 +69,7 @@ function parseContextFragment() {
 
     }
     catch(e) {
-        console.log("failed to parse context from fragment", e);
+        console.error("failed to parse context from fragment", e);
     }
     
 }
